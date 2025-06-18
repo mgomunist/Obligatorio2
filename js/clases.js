@@ -55,7 +55,7 @@ class Carrera {
         }
     }
 
-    // Devuelve el promedio de inscriptos por carrera
+    // Retorna la cantidad de inscriptos en una carrera
     cantidadInscriptos() {
         return this.inscripciones.length;
     }
