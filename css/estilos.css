@@ -73,7 +73,16 @@ nav {
     max-width: 1200px;
     margin: 20px auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: none;
 }
+
+/* Cambio*/ 
+.tab-button.active {
+    background-color: #ffffff;
+    border-bottom: 2px solid #4caf50;
+    font-weight: bold;
+}
+
 
 .tab-content.active {
     display: block;
