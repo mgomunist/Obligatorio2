@@ -2,240 +2,214 @@
               Mauricio Cabrera - Nro de estudiante: 264956-->
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sitio de Corredores</title>
-    <link rel="stylesheet" href="css/estilos.css">
-    <script src="clases.js"></script>
-    <script src="js/main.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sitio de Corredores</title>
+  <link rel="stylesheet" href="css/estilos.css"/>
+  <script src="js/clases.js"></script>>
+  <script src="js/main.js"></script>
 </head>
-
 <body>
-    <header>
-        <h1>Sitio de Corredores</h1>
-        <div class="banner">
-            <img src="img/corredores-uruguay.jpg" alt="Corredores de Uruguay">
+  <header>
+    <h1>Sitio de Corredores</h1>
+    <div class="banner">
+      <img src="img/corredores-uruguay.jpg" alt="Corredores de Uruguay"/>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab-button" data-tab="datos" onclick="showTab('datos')">Datos</button>
+    <button class="tab-button" data-tab="estadisticas" onclick="showTab('estadisticas')">Estadísticas</button>
+  </nav>
+
+  <main>
+    <section id="datos" class="tab-content active">
+      <h3>Datos</h3>
+
+      <!-- Carreras -->
+      <div class="form-section">
+        <h2>Carreras</h2>
+        <form>
+          <div class="form-group">
+            <label for="carrera-nombre">Nombre</label>
+            <input type="text" id="carrera-nombre" name="carrera-nombre"/>
+          </div>
+          <div class="form-group">
+            <label for="departamento">Departamento</label>
+            <select id="departamento" name="departamento">
+              <option value="montevideo">Montevideo</option>
+              <option value="artigas">Artigas</option>
+              <option value="canelones">Canelones</option>
+              <option value="cerrolargo">Cerro Largo</option>
+              <option value="colonia">Colonia</option>
+              <option value="durazno">Durazno</option>
+              <option value="flores">Flores</option>
+              <option value="florida">Florida</option>
+              <option value="lavalleja">Lavalleja</option>
+              <option value="maldonado">Maldonado</option>
+              <option value="paysandu">Paysandú</option>
+              <option value="rionegro">Río Negro</option>
+              <option value="rivera">Rivera</option>
+              <option value="rocha">Rocha</option>
+              <option value="salto">Salto</option>
+              <option value="sanjose">San José</option>
+              <option value="soriano">Soriano</option>
+              <option value="tacuarembo">Tacuarembó</option>
+              <option value="treintaytres">Treinta y Tres</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" value="2024-01-01"/>
+          </div>
+          <div class="form-group">
+            <label for="cupos">Cupos</label>
+            <input type="text" id="cupos" name="cupos"/>
+          </div>
+          <button type="button" class="btn" id="btn-agregar-carrera">Agregar Carrera</button>
+        </form>
+      </div>
+
+      <!-- Patrocinadores -->
+      <div class="form-section">
+        <h2>Patrocinadores</h2>
+        <form>
+          <div class="form-group">
+            <label for="patrocinador-nombre">Nombre</label>
+            <input type="text" id="patrocinador-nombre" name="patrocinador-nombre"/>
+          </div>
+          <div class="form-group">
+            <label for="rubro">Rubro</label>
+            <select id="rubro" name="rubro">
+              <option value="alimenticio">Alimenticio</option>
+              <option value="deportivo">Deportivo</option>
+              <option value="tecnologia">Tecnología</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="carreras">Carreras</label>
+            <input type="number" id="carreras" name="carreras" placeholder="0"/>
+          </div>
+          <button type="button" class="btn" id="btn-agregar-patrocinador">Agregar/Actualizar Patrocinador</button>
+        </form>
+      </div>
+
+      <!-- Corredores -->
+      <div class="form-section">
+        <h2>Corredores</h2>
+        <form>
+          <div class="form-group">
+            <label for="corredor-nombre">Nombre</label>
+            <input type="text" id="corredor-nombre" name="corredor-nombre"/>
+          </div>
+          <div class="form-group">
+            <label for="edad">Edad</label>
+            <input type="number" id="edad" name="edad"/>
+          </div>
+          <div class="form-group">
+            <label for="cedula">Cédula</label>
+            <input type="text" id="cedula" name="cedula"/>
+          </div>
+          <div class="form-group">
+            <label for="fecha-medica">Fecha de vencimiento de ficha médica</label>
+            <input type="date" id="fecha-medica" name="fecha-medica" value="2024-01-01"/>
+          </div>
+          <div class="form-group">
+            <fieldset>
+              <div class="radio-group">
+                <legend>Tipo de corredor:</legend>
+                <label><input type="radio" name="tipo-corredor" value="elite"/> Deportista de elite</label>
+                <label><input type="radio" name="tipo-corredor" value="comun" checked/> Deportista común</label>
+              </div>
+            </fieldset>
+          </div>
+          <button type="button" class="btn" id="btn-agregar-corredor">Agregar Corredor</button>
+        </form>
+      </div>
+
+      <!-- Inscripciones -->
+      <div class="form-section">
+        <h2>Inscripciones</h2>
+        <form>
+          <div class="form-group">
+            <label for="corredor-select">Corredores</label>
+            <select id="corredor-select" name="corredor-select">
+              <option value="">Seleccionar corredor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="carrera-select">Carreras</label>
+            <select id="carrera-select" name="carrera-select">
+              <option value="">Seleccionar carrera</option>
+            </select>
+          </div>
+          <button type="button" class="btn" id="btn-inscribir">Inscribir</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section id="estadisticas" class="tab-content">
+      <h3>Estadísticas</h3>
+      <div class="form-section">
+        <h2>Datos generales</h2>
+        <div class="form-group">
+          <ul style="list-style-type: disc; padding-left: 1.5rem;">
+            <li>Promedio de inscriptos por carrera: sin datos</li>
+            <li>Carreras con más inscriptos: <br>&emsp;· sin datos</li>
+            <li>Carreras con inscriptos ordenadas por fecha: <br>&emsp;· sin datos</li>
+            <li>Porcentaje de conversiones de élite: sin datos</li>
+          </ul>
         </div>
-    </header>
+      </div>
 
-    <nav>
-        <button class="tab-button" data-tab="datos" onclick="showTab('datos')">Datos</button>
-        <button class="tab-button" data-tab="estadisticas" onclick="showTab('estadisticas')">Estadísticas</button>
+      <div class="form-section">
+        <h2>Consulta inscriptos</h2>
+        <form>
+          <div class="form-group">
+            <label for="carrera-consulta">Carrera</label>
+            <select id="carrera-consulta" name="carrera-consulta">
+              <option value="">Seleccionar carrera</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <fieldset>
+              <div class="radio-group">
+                <legend>Ordenar por:</legend>
+                <label><input type="radio" name="ordenar" value="nombre" checked/> Nombre</label>
+                <label><input type="radio" name="ordenar" value="numero"/> Número</label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="table-container">
+            <table>
+              <caption>Inscriptos</caption>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Edad</th>
+                  <th>Cédula</th>
+                  <th>Fecha Médica</th>
+                  <th>Número</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Datos se cargarían dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
 
-    </nav>
-
-    <main>
-        <section id="datos" class="tab-content active">
-            <h3>Datos</h3>
-            <div class="form-section">
-                <h2>Carreras</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="carrera-nombre">Nombre</label>
-                        <input type="text" id="carrera-nombre" name="carrera-nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="departamento">Departamento</label>
-                        <select id="departamento" name="departamento">
-                            <option value="montevideo">Montevideo</option>
-                            <option value="artigas">Artigas</option>
-                            <option value="canelones">Canelones</option>
-                            <option value="cerrolargo">Cerro Largo</option>
-                            <option value="colonia">Colonia</option>
-                            <option value="durazno">Durazno</option>
-                            <option value="flores">Flores</option>
-                            <option value="florida">Florida</option>
-                            <option value="lavalleja">Lavalleja</option>
-                            <option value="maldonado">Maldonado</option>
-                            <option value="paysandu">Paysandú</option>
-                            <option value="rionegro">Río Negro</option>
-                            <option value="rivera">Rivera</option>
-                            <option value="rocha">Rocha</option>
-                            <option value="salto">Salto</option>
-                            <option value="sanjose">San José</option>
-                            <option value="soriano">Soriano</option>
-                            <option value="tacuarembo">Tacuarembó</option>
-                            <option value="treintaytres">Treinta y Tres</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fecha">Fecha</label>
-                        <input type="date" id="fecha" name="fecha" value="2024-01-01">
-                    </div>
-                    <div class="form-group">
-                        <label for="cupos">Cupos</label>
-                        <input type="text" id="cupos" name="cupos">
-                    </div>
-                    <button type="button" class="btn">Agregar Carrera</button>
-                </form>
-            </div>
-
-            <div class="form-section">
-                <h2>Patrocinadores</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="patrocinador-nombre">Nombre</label>
-                        <input type="text" id="patrocinador-nombre" name="patrocinador-nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="rubro">Rubro</label>
-                        <select id="rubro" name="rubro">
-                            <option value="alimenticio">Alimenticio</option>
-                            <option value="deportivo">Deportivo</option>
-                            <option value="tecnologia">Tecnología</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="carreras">Carreras</label>
-                        <input type="number" id="carreras" name="carreras" placeholder="0">
-                    </div>
-                    <button type="button" class="btn">Agregar/Actualizar Patrocinador</button>
-                </form>
-            </div>
-
-            <div class="form-section">
-                <h2>Corredores</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="corredor-nombre">Nombre</label>
-                        <input type="text" id="corredor-nombre" name="corredor-nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="edad">Edad</label>
-                        <input type="number" id="edad" name="edad">
-                    </div>
-                    <div class="form-group">
-                        <label for="cedula">Cédula</label>
-                        <input type="text" id="cedula" name="cedula">
-                    </div>
-                    <div class="form-group">
-                        <label for="fecha-medica">Fecha de vencimiento de ficha médica</label>
-                        <input type="date" id="fecha-medica" name="fecha-medica" value="2024-01-01">
-                    </div>
-                    <div class="form-group">
-                        <fieldset>
-                            <div class="radio-group">
-                                <legend>Tipo de corredor:</legend>
-                                <label><input type="radio" name="tipo-corredor" value="elite"> Deportista de
-                                    elite</label>
-                                <label><input type="radio" name="tipo-corredor" value="comun" checked> Deportista común</label>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <button type="button" class="btn">Agregar Corredor</button>
-                </form>
-            </div>
-
-            <div class="form-section">
-                <h2>Inscripciones</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="corredor-select">Corredores</label>
-                        <select id="corredor-select" name="corredor-select">
-                            <option value="">Seleccionar corredor</option>
-                            <option value="corredor1">Corredor 1</option>
-                            <option value="corredor2">Corredor 2</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="carrera-select">Carreras</label>
-                        <select id="carrera-select" name="carrera-select">
-                            <option value="">Seleccionar carrera</option>
-                            <option value="carrera1">Carrera 1</option>
-                            <option value="carrera2">Carrera 2</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn">Inscribir</button>
-                </form>
-            </div>
-        </section>
-
-        <section id="estadisticas" class="tab-content active">
-            <h3>Estadísticas</h3>
-            <div class="form-section">
-                <h2>Datos generales</h2>
-                <div class="form-group">
-                    <ul style="list-style-type: disc; padding-left: 1.5rem;">
-                        <li>Promedio de inscriptos por carrera: sin datos</li>
-                        <li>Carreras con más inscriptos: <br> &emsp;· sin datos</li>
-                        <li>Carreras con inscriptos ordenadas por fecha: <br> &emsp;· sin datos</li>
-                        <li>Porcentaje de conversiones de élite: sin datos</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h2>Consulta inscriptos</h2>
-                <form>
-                    <div class="form-group">
-                        <label for="carrera-consulta">Carrera</label>
-                        <select id="carrera-consulta" name="carrera-consulta">
-                            <option value="">Seleccionar carrera</option>
-                            <option value="carrera1">Carrera 1</option>
-                            <option value="carrera2">Carrera 2</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <fieldset>
-                            <div class="radio-group">
-                                <legend>Ordenar por:</legend>
-                                <label><input type="radio" name="ordenar" value="nombre" checked> Nombre</label>
-                                <label><input type="radio" name="ordenar" value="numero"> Número</label>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <caption>Inscriptos</caption>
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Edad</th>
-                                    <th>Cédula</th>
-                                    <th>Fecha Médica</th>
-                                    <th>Número</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Datos se cargarían dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </form>
-            </div>
-
-            <div class="form-section">
-                <h2>Visualizar Mapa:</h2>
-                <form>
-                    <div class="form-group">
-                        <fieldset>
-                            <div class="radio-group">
-                                <label><input type="radio" name="mapa-tipo" value="carreras" checked> Por
-                                    Carreras</label>
-                                <label><input type="radio" name="mapa-tipo" value="inscripciones"> Por
-                                    Inscripciones</label>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="map-container">
-                        <!-- Área para el mapa -->
-                    </div>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <p>Programación 1 - Obligatorio 1er semestre 2025 - Autores: Mariana Gómez y Mauricio Cabrera</p>
-            <p>Grupo N1A - Mariana Gómez Munist (Número 207978) - <a
-                    href="#">https://www.linkedin.com/in/margomezmunist/</a></p>
-            <p>Grupo N1A - Mauricio Cabrera Regalado (Número 264956) - <a
-                    href="#">https://www.linkedin.com/in/mauricio-cabreraregalado/</a></p>
-        </div>
-    </footer>
+  <footer>
+    <div class="footer-content">
+      <p>Programación 1 - Obligatorio 1er semestre 2025 - Autores: Mariana Gómez y Mauricio Cabrera</p>
+      <p>Grupo N1A - Mariana Gómez Munist (Número 207978) - <a href="#">https://www.linkedin.com/in/margomezmunist/</a></p>
+      <p>Grupo N1A - Mauricio Cabrera Regalado (Número 264956) - <a href="#">https://www.linkedin.com/in/mauricio-cabreraregalado/</a></p>
+    </div>
+  </footer>
 </body>
-
 </html>
