@@ -65,6 +65,7 @@ function agregarCorredorDesdeFormulario() {
     alert(`Corredor "${nombre}" agregado correctamente.`);
 
     actualizarSelectCorredores();
+    actualizarEstadisticas();
 
     document.getElementById("corredor-nombre").value = "";
     document.getElementById("edad").value = "";
@@ -90,6 +91,7 @@ function agregarCarreraDesdeFormulario() {
     alert(`Carrera "${nombre}" agregada correctamente.`);
 
     actualizarSelectCarreras();
+    actualizarEstadisticas();
 
     document.getElementById("carrera-nombre").value = "";
     document.getElementById("cupos").value = "";
@@ -169,11 +171,10 @@ function actualizarTablaInscriptos() {
     const carreraNombre = document.getElementById("carrera-consulta").value;
     const tbody = document.querySelector(".table-container tbody");
 
-    // Limpiar tabla
     tbody.innerHTML = "";
 
     if (!carreraNombre) {
-        return; // No hay carrera seleccionada
+        return;
     }
 
     const carrera = sistema.buscarCarrera(carreraNombre);
@@ -188,10 +189,8 @@ function actualizarTablaInscriptos() {
         return;
     }
 
-    // Obtener criterio de orden
     const orden = document.querySelector('input[name="ordenar"]:checked').value;
 
-    // Copiar inscripciones y ordenar
     const inscripcionesOrdenadas = [...carrera.inscripciones];
     inscripcionesOrdenadas.sort((a, b) => {
         if (orden === "nombre") {
@@ -201,7 +200,6 @@ function actualizarTablaInscriptos() {
         }
     });
 
-    // Llenar tabla
     inscripcionesOrdenadas.forEach(inscripcion => {
         const corredor = inscripcion.corredor;
         const row = document.createElement("tr");
@@ -216,8 +214,44 @@ function actualizarTablaInscriptos() {
     });
 }
 
-// Funciones vacías para no dar error
+// Actualizar estadísticas dinámicamente
 function actualizarEstadisticas() {
-    console.log("actualizarEstadisticas() pendiente de implementación.");
-}
+    const lista = document.getElementById("estadisticas-lista");
+    if (!lista) {
+        console.error("No se encontró la lista de estadísticas.");
+        return;
+    }
 
+    lista.innerHTML = "";
+
+    const promedio = sistema.promedioInscriptosPorCarrera();
+    const liPromedio = document.createElement("li");
+    liPromedio.textContent = `Promedio de inscriptos por carrera: ${promedio}`;
+    lista.appendChild(liPromedio);
+
+    const masInscriptos = sistema.carrerasConMasInscriptos();
+    const liMas = document.createElement("li");
+    if (masInscriptos.length > 0 && masInscriptos[0].cantidadInscriptos() > 0) {
+        const nombres = masInscriptos.map(c => `· ${c.nombre}`).join("<br>&emsp;");
+        liMas.innerHTML = `Carreras con más inscriptos:<br>&emsp;${nombres}`;
+    } else {
+        liMas.textContent = "Carreras con más inscriptos: sin datos";
+    }
+    lista.appendChild(liMas);
+
+    const carrerasConInscriptos = sistema.carreras.filter(c => c.cantidadInscriptos() > 0);
+    carrerasConInscriptos.sort((a, b) => a.fecha - b.fecha);
+    const liPorFecha = document.createElement("li");
+    if (carrerasConInscriptos.length > 0) {
+        const nombres = carrerasConInscriptos.map(c => `· ${c.nombre}`).join("<br>&emsp;");
+        liPorFecha.innerHTML = `Carreras con inscriptos ordenadas por fecha:<br>&emsp;${nombres}`;
+    } else {
+        liPorFecha.textContent = "Carreras con inscriptos ordenadas por fecha: sin datos";
+    }
+    lista.appendChild(liPorFecha);
+
+    const porcentajeElite = sistema.porcentajeElite();
+    const liElite = document.createElement("li");
+    liElite.textContent = `Porcentaje de conversiones de élite: ${porcentajeElite}%`;
+    lista.appendChild(liElite);
+}
