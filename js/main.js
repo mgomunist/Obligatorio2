@@ -31,6 +31,19 @@ window.addEventListener("DOMContentLoaded", () => {
     // Mostrar sección por defecto
     showTab("datos");
 
+    // Obtener fecha de hoy en formato YYYY-MM-DD
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+    const dd = String(hoy.getDate()).padStart(2, "0");
+    const fechaHoy = `${yyyy}-${mm}-${dd}`;
+
+    // Asignar valor y restricción mínima
+    document.getElementById("fecha").value = fechaHoy;
+    document.getElementById("fecha-medica").value = fechaHoy;
+    document.getElementById("fecha").min = fechaHoy;
+    document.getElementById("fecha-medica").min = fechaHoy;
+
     // Vincular botones
     document.getElementById("btn-agregar-carrera").addEventListener("click", agregarCarreraDesdeFormulario);
     document.getElementById("btn-agregar-patrocinador").addEventListener("click", agregarOActualizarPatrocinadorDesdeFormulario);
@@ -70,7 +83,7 @@ function agregarCorredorDesdeFormulario() {
     document.getElementById("corredor-nombre").value = "";
     document.getElementById("edad").value = "";
     document.getElementById("cedula").value = "";
-    document.getElementById("fecha-medica").value = "2024-01-01";
+    document.getElementById("fecha-medica").value = fechaHoy;
 }
 
 // Agregar carrera

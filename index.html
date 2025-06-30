@@ -109,7 +109,14 @@
           </div>
           <div class="form-group">
             <label for="cedula">Cédula</label>
-            <input type="text" id="cedula" name="cedula"/>
+            <input
+              type="text"
+              id="cedula"
+              name="cedula"
+              maxlength="7"
+              pattern="\d{1,7}"
+              title="Debe contener solo números, máximo 7 dígitos"
+            />
           </div>
           <div class="form-group">
             <label for="fecha-medica">Fecha de vencimiento de ficha médica</label>
