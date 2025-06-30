@@ -380,3 +380,12 @@ const data = google.visualization.arrayToDataTable(datos);
   const chart = new google.visualization.GeoChart(document.getElementById('mapa'));
   chart.draw(data, options);
 }
+
+// Volver a dibujar el mapa si la ventana cambia de tamaño. Es para hacerlo más responsivo.
+window.addEventListener("resize", () => {
+  // Solo si la pestaña estadísticas está activa
+  const estadisticasActiva = document.getElementById("estadisticas").classList.contains("active");
+  if (estadisticasActiva) {
+    dibujarMapa();
+  }
+});

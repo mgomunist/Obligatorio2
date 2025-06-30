@@ -57,8 +57,9 @@ nav {
 }
 
 .tab-button.active {
-    background-color: white;
-    border-bottom: 1px solid white;
+    background-color: #ffffff;
+    border-bottom: 2px solid #4caf50;
+    font-weight: bold;
 }
 
 .tab-button:hover {
@@ -74,13 +75,6 @@ nav {
     margin: 20px auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: none;
-}
-
-/* Cambio*/ 
-.tab-button.active {
-    background-color: #ffffff;
-    border-bottom: 2px solid #4caf50;
-    font-weight: bold;
 }
 
 .tab-content.active {
@@ -135,11 +129,13 @@ input:not([type="radio"]),
 select,
 textarea {
     width: 100%;
+    max-width: 300px;
     padding: 6px 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
     background-color: white;
+    box-sizing: border-box;
 }
 
 textarea {
@@ -149,25 +145,21 @@ textarea {
 
 /* Radio buttons */
 fieldset {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    border: none; /* Elimina el borde */
+    border: none;
     padding: 0;
-    margin: 0;
 }
 
 legend {
     color: #333;
     font-weight: 500;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
 .radio-group {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 20px;
 }
 
 .radio-group label {
@@ -200,10 +192,11 @@ legend {
 /* Tabla */
 .table-container {
     margin-top: 15px;
+    overflow-x: auto;
 }
 
 table {
-    width: 50%;
+    width: 100%;
     border-collapse: collapse;
     background-color: white;
     border-radius: 4px;
@@ -256,14 +249,6 @@ footer {
     text-decoration: underline;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-textarea,
-select {
-    width: 300px; 
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .banner img {
@@ -272,8 +257,8 @@ select {
     }
 
     .radio-group {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;
+        gap: 15px;
     }
 
     .form-section {
@@ -300,7 +285,9 @@ select {
         font-size: 12px;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
         font-size: 12px;
     }
 }
