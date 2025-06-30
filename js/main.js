@@ -36,6 +36,14 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-agregar-patrocinador").addEventListener("click", agregarOActualizarPatrocinadorDesdeFormulario);
     document.getElementById("btn-agregar-corredor").addEventListener("click", agregarCorredorDesdeFormulario);
     document.getElementById("btn-inscribir").addEventListener("click", inscribirCorredorDesdeFormulario);
+
+    // Vincular select de carrera-consulta
+    document.getElementById("carrera-consulta").addEventListener("change", actualizarTablaInscriptos);
+
+    // Vincular radios de orden
+    document.querySelectorAll('input[name="ordenar"]').forEach(radio => {
+        radio.addEventListener("change", actualizarTablaInscriptos);
+    });
 });
 
 // Agregar corredor
@@ -122,7 +130,6 @@ function inscribirCorredorDesdeFormulario() {
     alert(resultado.mensaje);
 
     if (resultado.exito) {
-        // Estas funciones luego las implementarás
         actualizarEstadisticas();
         actualizarTablaInscriptos();
     }
@@ -157,11 +164,60 @@ function actualizarSelectCorredores() {
     });
 }
 
+// Actualizar tabla de inscriptos
+function actualizarTablaInscriptos() {
+    const carreraNombre = document.getElementById("carrera-consulta").value;
+    const tbody = document.querySelector(".table-container tbody");
+
+    // Limpiar tabla
+    tbody.innerHTML = "";
+
+    if (!carreraNombre) {
+        return; // No hay carrera seleccionada
+    }
+
+    const carrera = sistema.buscarCarrera(carreraNombre);
+
+    if (!carrera || carrera.inscripciones.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.textContent = "No hay inscriptos en esta carrera.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+        return;
+    }
+
+    // Obtener criterio de orden
+    const orden = document.querySelector('input[name="ordenar"]:checked').value;
+
+    // Copiar inscripciones y ordenar
+    const inscripcionesOrdenadas = [...carrera.inscripciones];
+    inscripcionesOrdenadas.sort((a, b) => {
+        if (orden === "nombre") {
+            return a.corredor.nombre.localeCompare(b.corredor.nombre);
+        } else {
+            return a.numero - b.numero;
+        }
+    });
+
+    // Llenar tabla
+    inscripcionesOrdenadas.forEach(inscripcion => {
+        const corredor = inscripcion.corredor;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${corredor.nombre}</td>
+            <td>${corredor.edad}</td>
+            <td>${corredor.cedula}</td>
+            <td>${corredor.fichaMedica.toLocaleDateString()}</td>
+            <td>${inscripcion.numero}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
 // Funciones vacías para no dar error
 function actualizarEstadisticas() {
     console.log("actualizarEstadisticas() pendiente de implementación.");
 }
 
-function actualizarTablaInscriptos() {
-    console.log("actualizarTablaInscriptos() pendiente de implementación.");
-}
