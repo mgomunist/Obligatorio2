@@ -272,19 +272,31 @@ function actualizarEstadisticas() {
   }
   lista.appendChild(liMas);
 
-  const carrerasConInscriptos = sistema.carreras.filter(c => c.cantidadInscriptos() > 0);
-  carrerasConInscriptos.sort((a, b) => a.fecha - b.fecha);
-  const liPorFecha = document.createElement("li");
-  if (carrerasConInscriptos.length > 0) {
-    const nombres = carrerasConInscriptos.map(c => `· ${c.nombre}`).join("<br>&emsp;");
-    liPorFecha.innerHTML = `Carreras con inscriptos ordenadas por fecha:<br>&emsp;${nombres}`;
+  // Carreras SIN inscriptos
+  const carrerasSinInscriptos = sistema.carreras.filter(c => c.cantidadInscriptos() === 0);
+  carrerasSinInscriptos.sort((a, b) => a.fecha - b.fecha);
+  const liSin = document.createElement("li");
+  if (carrerasSinInscriptos.length > 0) {
+    const nombres = carrerasSinInscriptos.map(c => `· ${c.nombre}`).join("<br>&emsp;");
+    liSin.innerHTML = `Carreras sin inscriptos ordenadas por fecha:<br>&emsp;${nombres}`;
   } else {
-    liPorFecha.textContent = "Carreras con inscriptos ordenadas por fecha: sin datos";
+    liSin.textContent = "Carreras sin inscriptos ordenadas por fecha: sin datos";
   }
-  lista.appendChild(liPorFecha);
+  lista.appendChild(liSin);
 
   const porcentajeElite = sistema.porcentajeElite();
   const liElite = document.createElement("li");
   liElite.textContent = `Porcentaje de conversiones de élite: ${porcentajeElite}%`;
   lista.appendChild(liElite);
 }
+
+// Eventos de radio para Visualizar Mapa
+document.querySelectorAll('input[name="visualizar"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    const tipo = radio.value;
+    console.log(`Visualizar mapa por: ${tipo}`);
+    // Acá se va a dibujar el mapa con Google Charts
+    const divMapa = document.getElementById("mapa");
+    divMapa.innerHTML = `<p style="padding:1rem;">Mapa seleccionado: <strong>${tipo}</strong></p>`;
+  });
+});

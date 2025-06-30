@@ -127,11 +127,9 @@
           </div>
           <div class="form-group">
             <fieldset>
-              <div class="radio-group">
-                <legend>Tipo de corredor:</legend>
-                <label><input type="radio" name="tipo-corredor" value="elite"/> Deportista de elite</label>
-                <label><input type="radio" name="tipo-corredor" value="comun" checked/> Deportista común</label>
-              </div>
+              <legend>Tipo de corredor:</legend>
+              <label><input type="radio" name="tipo-corredor" value="elite"/> Deportista de elite</label>
+              <label><input type="radio" name="tipo-corredor" value="comun" checked/> Deportista común</label>
             </fieldset>
           </div>
           <button type="button" class="btn" id="btn-agregar-corredor">Agregar Corredor</button>
@@ -168,7 +166,7 @@
           <ul id="estadisticas-lista" style="list-style-type: disc; padding-left: 1.5rem;">
             <li>Promedio de inscriptos por carrera: sin datos</li>
             <li>Carreras con más inscriptos: <br>&emsp;· sin datos</li>
-            <li>Carreras con inscriptos ordenadas por fecha: <br>&emsp;· sin datos</li>
+            <li>Carreras sin inscriptos ordenadas por fecha: <br>&emsp;· sin datos</li>
             <li>Porcentaje de conversiones de élite: sin datos</li>
           </ul>
         </div>
@@ -185,11 +183,9 @@
           </div>
           <div class="form-group">
             <fieldset>
-              <div class="radio-group">
-                <legend>Ordenar por:</legend>
-                <label><input type="radio" name="ordenar" value="nombre" checked/> Nombre</label>
-                <label><input type="radio" name="ordenar" value="numero"/> Número</label>
-              </div>
+              <legend>Ordenar por:</legend>
+              <label><input type="radio" name="ordenar" value="nombre" checked/> Nombre</label>
+              <label><input type="radio" name="ordenar" value="numero"/> Número</label>
             </fieldset>
           </div>
           <div class="table-container">
@@ -205,11 +201,25 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- Datos se cargarían dinámicamente -->
+                <!-- Datos se cargarán dinámicamente -->
               </tbody>
             </table>
           </div>
         </form>
+      </div>
+
+      <!-- Visualizar Mapa -->
+      <div class="form-section">
+        <h2>Visualizar Mapa</h2>
+        <div class="form-group">
+          <fieldset>
+            <label><input type="radio" name="visualizar" value="carreras" checked/> Por Carreras</label>
+            <label><input type="radio" name="visualizar" value="inscripciones"/> Por Inscripciones</label>
+          </fieldset>
+        </div>
+        <div id="mapa" style="width: 100%; height: 400px; background-color: #c2f0c2; border-radius: 4px;">
+          <!-- Acá se renderizará el GeoChart -->
+        </div>
       </div>
     </section>
   </main>
