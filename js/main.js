@@ -111,10 +111,7 @@ function agregarOActualizarPatrocinadorDesdeFormulario() {
     return;
   }
 
-  // Verificar si ya existía un patrocinador con este nombre
   let existiaPatrocinador = sistema.patrocinadores.some(p => p.nombre === nombre);
-
-  // Verificar si la carrera ya estaba patrocinada por otro patrocinador
   let carreraYaPatrocinadaPorOtro = sistema.patrocinadores.find(
     p => p.carrera === carreraAsociada && p.nombre !== nombre
   );
@@ -148,12 +145,32 @@ function inscribirCorredorDesdeFormulario() {
 
   let resultado = sistema.inscribirCorredor(cedula, nombreCarrera);
 
-  alert(resultado.mensaje);
-
-  if (resultado.exito) {
-    actualizarEstadisticas();
-    actualizarTablaInscriptos();
+  if (!resultado.exito) {
+    alert(resultado.mensaje);
+    return;
   }
+
+  const inscripcion = resultado.inscripcion;
+  const corredor = inscripcion.corredor;
+  const carrera = inscripcion.carrera;
+
+  let patrocinador = sistema.patrocinadores.find(p => p.carrera === carrera.nombre);
+
+  const fechaFicha = corredor.fichaMedica.toLocaleDateString();
+  const fechaCarrera = carrera.fecha.toLocaleDateString();
+
+  let mensaje = `Número: ${inscripcion.numero}\n`;
+  mensaje += `Nombre: ${corredor.nombre} ${corredor.edad} años, CI: ${corredor.cedula} Ficha Médica ${fechaFicha}\n`;
+  mensaje += corredor.tipo === "elite" ? "Deportista de elite\n" : "Común\n";
+  mensaje += `Carrera: ${carrera.nombre} en ${carrera.departamento} el ${fechaCarrera} Cupo: ${carrera.cupo}\n`;
+  if (patrocinador) {
+    mensaje += `${patrocinador.nombre} (${patrocinador.rubro})`;
+  }
+
+  alert(mensaje);
+
+  actualizarEstadisticas();
+  actualizarTablaInscriptos();
 }
 
 // Actualizar selectores de carreras
