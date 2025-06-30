@@ -19,6 +19,10 @@ function showTab(tabId) {
     const target = button.getAttribute("data-tab");
     button.classList.toggle("active", target === tabId);
   });
+  // Si es la pestaña estadísticas, dibujamos el mapa (asegura que se redibuje)
+  if (tabId === "estadisticas") {
+    dibujarMapa();
+  }
 }
 
 // Al cargar todo el DOM
@@ -290,13 +294,89 @@ function actualizarEstadisticas() {
   lista.appendChild(liElite);
 }
 
-// Eventos de radio para Visualizar Mapa
-document.querySelectorAll('input[name="visualizar"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    const tipo = radio.value;
-    console.log(`Visualizar mapa por: ${tipo}`);
-    // Acá se va a dibujar el mapa con Google Charts
-    const divMapa = document.getElementById("mapa");
-    divMapa.innerHTML = `<p style="padding:1rem;">Mapa seleccionado: <strong>${tipo}</strong></p>`;
-  });
+// Cargar Google Charts
+google.charts.load("current", {
+  packages: ["geochart"]
 });
+
+google.charts.setOnLoadCallback(() => {
+  // Escuchar los radios del mapa
+  document.querySelectorAll('input[name="visualizar"]').forEach(radio => {
+  radio.addEventListener("change", dibujarMapa);
+});
+
+  // Dibujar mapa al cargar
+  dibujarMapa();
+});
+
+function dibujarMapa() {
+  const tipo = document.querySelector('input[name="visualizar"]:checked').value;
+
+  // Conteo por departamento
+  const conteo = {};
+  sistema.carreras.forEach(carrera => {
+    const dep = carrera.departamento;
+    if (!conteo[dep]) conteo[dep] = 0;
+
+    if (tipo === "carreras") {
+      conteo[dep]++;
+    } else {
+      conteo[dep] += carrera.inscripciones.length;
+    }
+  });
+
+  const departamentos = [
+    "Montevideo",
+    "Artigas",
+    "Canelones",
+    "Cerro Largo",
+    "Colonia",
+    "Durazno",
+    "Flores",
+    "Florida",
+    "Lavalleja",
+    "Maldonado",
+    "Paysandú",
+    "Río Negro",
+    "Rivera",
+    "Rocha",
+    "Salto",
+    "San José",
+    "Soriano",
+    "Tacuarembó",
+    "Treinta y Tres"
+  ];
+
+const datos = [
+    ["Departamento", "Cantidad", { role: "tooltip", p: {html: true} }]
+  ];
+
+  departamentos.forEach(dep => {
+    const cantidad = conteo[dep] || 0;
+    datos.push([
+      dep,
+      cantidad,
+      `<div style="padding:5px;"><strong>${dep}</strong><br/>Cantidad: ${cantidad} ${tipo === "carreras" ? "carreras" : "inscripciones"}</div>`
+    ]);
+  });
+
+const data = google.visualization.arrayToDataTable(datos);
+
+
+  const options = {
+    region: 'UY',               
+    displayMode: 'regions',     
+    resolution: 'provinces',    
+    colorAxis: {
+      colors: ['#d0e9f7', '#0077be']  // De celeste claro a azul oscuro
+    },
+    backgroundColor: '#e0f7fa',
+    datalessRegionColor: '#f0f0f0',
+    defaultColor: '#d0d0d0',
+    tooltip: { isHtml: true, trigger: 'focus' },
+    enableRegionInteractivity: true,
+  };
+
+  const chart = new google.visualization.GeoChart(document.getElementById('mapa'));
+  chart.draw(data, options);
+}

@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sitio de Corredores</title>
   <link rel="stylesheet" href="css/estilos.css"/>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="js/clases.js"></script>
   <script src="js/main.js"></script>
 </head>
@@ -217,8 +218,8 @@
             <label><input type="radio" name="visualizar" value="inscripciones"/> Por Inscripciones</label>
           </fieldset>
         </div>
-        <div id="mapa" style="width: 100%; height: 400px; background-color: #c2f0c2; border-radius: 4px;">
-          <!-- Acá se renderizará el GeoChart -->
+        <div id="mapa" class="map-container" style="width: 100%; height: 500px;">
+          <!-- El mapa se cargará aquí -->
         </div>
       </div>
     </section>
