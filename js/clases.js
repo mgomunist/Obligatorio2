@@ -24,49 +24,32 @@ class Sistema {
   }
 
   agregarOActualizarPatrocinador(patrocinadorNuevo) {
-    for (let i = 0; i < this.patrocinadores.length; i++) {
-      if (this.patrocinadores[i].nombre === patrocinadorNuevo.nombre) {
-        // Si ya existe actualiza rubro y carreras
-        this.patrocinadores[i].actualizarDatos(
-          patrocinadorNuevo.rubro,
-          patrocinadorNuevo.carreras
-        );
-        return;
-      }
-    }
+    // Si ya existía un patrocinador para esa carrera, lo eliminamos
+    this.patrocinadores = this.patrocinadores.filter(
+      p => p.carrera !== patrocinadorNuevo.carrera
+    );
 
-    // Si no existe lo agrega
+    // Si ya existía con el mismo nombre, lo eliminamos para actualizar datos
+    this.patrocinadores = this.patrocinadores.filter(
+      p => p.nombre !== patrocinadorNuevo.nombre
+    );
+
     this.patrocinadores.push(patrocinadorNuevo);
   }
 
   buscarCarrera(nombre) {
-    for (let carrera of this.carreras) {
-      if (carrera.nombre === nombre) {
-        return carrera;
-      }
-    }
-    return null;
+    return this.carreras.find(c => c.nombre === nombre) || null;
   }
 
   buscarCorredor(cedula) {
-    for (let corredor of this.corredores) {
-      if (corredor.cedula === cedula) {
-        return corredor;
-      }
-    }
-    return null;
+    return this.corredores.find(c => c.cedula === cedula) || null;
   }
 
   estaInscripto(cedula, nombreCarrera) {
     let carrera = this.buscarCarrera(nombreCarrera);
     if (!carrera) return false;
 
-    for (let inscripcion of carrera.inscripciones) {
-      if (inscripcion.corredor.cedula === cedula) {
-        return true;
-      }
-    }
-    return false;
+    return carrera.inscripciones.some(insc => insc.corredor.cedula === cedula);
   }
 
   inscribirCorredor(cedula, nombreCarrera) {
@@ -80,21 +63,21 @@ class Sistema {
     if (this.estaInscripto(cedula, nombreCarrera)) {
       return {
         exito: false,
-        mensaje: "El corredor ya está inscripto en esta carrera.",
+        mensaje: "El corredor ya está inscripto en esta carrera."
       };
     }
 
     if (!corredor.fichaVigente(carrera.fecha)) {
       return {
         exito: false,
-        mensaje: "La ficha médica no está vigente para la fecha de la carrera.",
+        mensaje: "La ficha médica no está vigente para la fecha de la carrera."
       };
     }
 
     if (!carrera.tieneCupo()) {
       return {
         exito: false,
-        mensaje: "La carrera no tiene más cupos disponibles.",
+        mensaje: "La carrera no tiene más cupos disponibles."
       };
     }
 
@@ -106,73 +89,39 @@ class Sistema {
     return {
       exito: true,
       mensaje: `Inscripción exitosa. Número asignado: ${numero}`,
-      inscripcion: inscripcion,
+      inscripcion: inscripcion
     };
   }
 
-  //De estadisticas:
   promedioInscriptosPorCarrera() {
     if (this.carreras.length === 0) return 0;
 
-    let totalInscriptos = 0;
-    for (let carrera of this.carreras) {
-      totalInscriptos += carrera.cantidadInscriptos();
-    }
+    let total = this.carreras.reduce(
+      (acc, c) => acc + c.cantidadInscriptos(),
+      0
+    );
 
-    let promedio = totalInscriptos / this.carreras.length;
+    let promedio = total / this.carreras.length;
     return parseFloat(promedio.toFixed(2));
   }
 
   carrerasConMasInscriptos() {
-    if (this.carreras.length === 0) {
-      return [];
-    }
+    if (this.carreras.length === 0) return [];
 
-    let max = -Infinity;
-    for (let i = 0; i < this.carreras.length; i++) {
-      let cantidad = this.carreras[i].cantidadInscriptos();
-      if (cantidad > max) {
-        max = cantidad;
-      }
-    }
+    let max = Math.max(...this.carreras.map(c => c.cantidadInscriptos()));
 
-    let resultado = [];
-    for (let i = 0; i < this.carreras.length; i++) {
-      if (this.carreras[i].cantidadInscriptos() === max) {
-        resultado.push(this.carreras[i]);
-      }
-    }
-
-    return resultado;
+    return this.carreras.filter(c => c.cantidadInscriptos() === max);
   }
 
   carrerasSinInscriptos() {
-    let sinInscriptos = [];
-
-    for (let carrera of this.carreras) {
-      if (carrera.cantidadInscriptos() === 0) {
-        sinInscriptos.push(carrera);
-      }
-    }
-
-    // Ordenar por fecha creciente
-    sinInscriptos.sort(function (a, b) {
-      return a.fecha - b.fecha;
-    });
-
-    return sinInscriptos;
+    let sinInscriptos = this.carreras.filter(c => c.cantidadInscriptos() === 0);
+    return sinInscriptos.sort((a, b) => a.fecha - b.fecha);
   }
 
   porcentajeElite() {
     if (this.corredores.length === 0) return 0;
 
-    let elite = 0;
-    for (let corredor of this.corredores) {
-      if (corredor.tipo === "elite") {
-        elite++;
-      }
-    }
-
+    let elite = this.corredores.filter(c => c.tipo === "elite").length;
     let porcentaje = (elite / this.corredores.length) * 100;
     return parseFloat(porcentaje.toFixed(2));
   }
@@ -181,25 +130,22 @@ class Sistema {
 class Carrera {
   constructor(nombre, departamento, fecha, cupo = 30) {
     this.nombre = nombre;
-    this.departamento = departamento; // número entre 1 y 19
+    this.departamento = departamento;
     this.fecha = new Date(fecha);
     this.cupo = Math.max(1, Math.min(cupo, 1000));
     this.inscripciones = [];
   }
 
-  // Verificar que haya cupo en la carrera
   tieneCupo() {
     return this.inscripciones.length < this.cupo;
   }
 
-  // Da un número consecutivo si se puede inscribir
   agregarInscripcion(inscripcion) {
     if (this.tieneCupo()) {
       this.inscripciones.push(inscripcion);
     }
   }
 
-  // Retorna la cantidad de inscriptos en una carrera
   cantidadInscriptos() {
     return this.inscripciones.length;
   }
@@ -214,7 +160,6 @@ class Corredor {
     this.tipo = tipo;
   }
 
-  // Verifica que la ficha médica esté vigente para la fecha de la carrera
   fichaVigente(fechaCarrera) {
     return this.fichaMedica >= new Date(fechaCarrera);
   }
@@ -229,15 +174,14 @@ class Inscripcion {
 }
 
 class Patrocinador {
-  constructor(nombre, rubro, carreras = []) {
+  constructor(nombre, rubro, carrera) {
     this.nombre = nombre;
     this.rubro = rubro;
-    this.carreras = carreras;
+    this.carrera = carrera;
   }
 
-  // Si el patrocinador ya esta registrado, se actualizan sus datos y las carreras que apoya
-  actualizarDatos(nuevoRubro, nuevasCarreras) {
+  actualizarDatos(nuevoRubro, nuevaCarrera) {
     this.rubro = nuevoRubro;
-    this.carreras = nuevasCarreras;
+    this.carrera = nuevaCarrera;
   }
 }
