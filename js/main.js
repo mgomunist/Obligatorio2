@@ -19,7 +19,7 @@ function showTab(tabId) {
     const target = button.getAttribute("data-tab");
     button.classList.toggle("active", target === tabId);
   });
-  // Si es la pestaña estadísticas, dibujamos el mapa (asegura que se redibuje)
+
   if (tabId === "estadisticas") {
     dibujarMapa();
   }
@@ -173,6 +173,30 @@ function inscribirCorredorDesdeFormulario() {
 
   alert(mensaje);
 
+  // Generar PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 10;
+
+  doc.setFontSize(14);
+  doc.text(`Comprobante de Inscripción`, 10, y); y += 10;
+  doc.setFontSize(12);
+  doc.text(`Número de inscripción: ${inscripcion.numero}`, 10, y); y += 8;
+  doc.text(`Nombre: ${corredor.nombre}`, 10, y); y += 8;
+  doc.text(`Edad: ${corredor.edad}`, 10, y); y += 8;
+  doc.text(`Cédula: ${corredor.cedula}`, 10, y); y += 8;
+  doc.text(`Ficha Médica: ${fechaFicha}`, 10, y); y += 8;
+  doc.text(`Tipo: ${corredor.tipo === "elite" ? "Deportista de elite" : "Deportista común"}`, 10, y); y += 8;
+  doc.text(`Carrera: ${carrera.nombre}`, 10, y); y += 8;
+  doc.text(`Departamento: ${carrera.departamento}`, 10, y); y += 8;
+  doc.text(`Fecha de Carrera: ${fechaCarrera}`, 10, y); y += 8;
+
+  if (patrocinador) {
+    doc.text(`Patrocinador: ${patrocinador.nombre} (${patrocinador.rubro})`, 10, y); y += 8;
+  }
+
+  doc.save(`inscripcion_${corredor.cedula}_${carrera.nombre}.pdf`);
+
   actualizarEstadisticas();
   actualizarTablaInscriptos();
 }
@@ -276,7 +300,6 @@ function actualizarEstadisticas() {
   }
   lista.appendChild(liMas);
 
-  // Carreras SIN inscriptos
   const carrerasSinInscriptos = sistema.carreras.filter(c => c.cantidadInscriptos() === 0);
   carrerasSinInscriptos.sort((a, b) => a.fecha - b.fecha);
   const liSin = document.createElement("li");
@@ -300,24 +323,19 @@ google.charts.load("current", {
 });
 
 google.charts.setOnLoadCallback(() => {
-  // Escuchar los radios del mapa
   document.querySelectorAll('input[name="visualizar"]').forEach(radio => {
-  radio.addEventListener("change", dibujarMapa);
-});
-
-  // Dibujar mapa al cargar
+    radio.addEventListener("change", dibujarMapa);
+  });
   dibujarMapa();
 });
 
 function dibujarMapa() {
   const tipo = document.querySelector('input[name="visualizar"]:checked').value;
 
-  // Conteo por departamento
   const conteo = {};
   sistema.carreras.forEach(carrera => {
     const dep = carrera.departamento;
     if (!conteo[dep]) conteo[dep] = 0;
-
     if (tipo === "carreras") {
       conteo[dep]++;
     } else {
@@ -326,29 +344,13 @@ function dibujarMapa() {
   });
 
   const departamentos = [
-    "Montevideo",
-    "Artigas",
-    "Canelones",
-    "Cerro Largo",
-    "Colonia",
-    "Durazno",
-    "Flores",
-    "Florida",
-    "Lavalleja",
-    "Maldonado",
-    "Paysandú",
-    "Río Negro",
-    "Rivera",
-    "Rocha",
-    "Salto",
-    "San José",
-    "Soriano",
-    "Tacuarembó",
-    "Treinta y Tres"
+    "Montevideo","Artigas","Canelones","Cerro Largo","Colonia","Durazno","Flores","Florida",
+    "Lavalleja","Maldonado","Paysandú","Río Negro","Rivera","Rocha","Salto","San José","Soriano",
+    "Tacuarembó","Treinta y Tres"
   ];
 
-const datos = [
-    ["Departamento", "Cantidad", { role: "tooltip", p: {html: true} }]
+  const datos = [
+    ["Departamento", "Cantidad", { role: "tooltip", p: { html: true } }]
   ];
 
   departamentos.forEach(dep => {
@@ -360,30 +362,27 @@ const datos = [
     ]);
   });
 
-const data = google.visualization.arrayToDataTable(datos);
-
+  const data = google.visualization.arrayToDataTable(datos);
 
   const options = {
-    region: 'UY',               
-    displayMode: 'regions',     
-    resolution: 'provinces',    
+    region: "UY",
+    displayMode: "regions",
+    resolution: "provinces",
     colorAxis: {
-      colors: ['#d0e9f7', '#0077be']  // De celeste claro a azul oscuro
+      colors: ["#d0e9f7", "#0077be"]
     },
-    backgroundColor: '#e0f7fa',
-    datalessRegionColor: '#f0f0f0',
-    defaultColor: '#d0d0d0',
-    tooltip: { isHtml: true, trigger: 'focus' },
-    enableRegionInteractivity: true,
+    backgroundColor: "#e0f7fa",
+    datalessRegionColor: "#f0f0f0",
+    defaultColor: "#d0d0d0",
+    tooltip: { isHtml: true, trigger: "focus" },
+    enableRegionInteractivity: true
   };
 
-  const chart = new google.visualization.GeoChart(document.getElementById('mapa'));
+  const chart = new google.visualization.GeoChart(document.getElementById("mapa"));
   chart.draw(data, options);
 }
 
-// Volver a dibujar el mapa si la ventana cambia de tamaño. Es para hacerlo más responsivo.
 window.addEventListener("resize", () => {
-  // Solo si la pestaña estadísticas está activa
   const estadisticasActiva = document.getElementById("estadisticas").classList.contains("active");
   if (estadisticasActiva) {
     dibujarMapa();
