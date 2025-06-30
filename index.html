@@ -1,5 +1,5 @@
 <!-- Autores: Mariana Gómez Munist - Nro de estudiante: 207978
-              Mauricio Cabrera - Nro de estudiante: 264956-->
+     Mauricio Cabrera - Nro de estudiante: 264956-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -92,7 +92,6 @@
             <label for="carrera-patrocinada">Carrera patrocinada</label>
             <select id="carrera-patrocinada" name="carrera-patrocinada">
               <option value="">Seleccionar carrera</option>
-              <!-- Opciones se llenan dinámicamente -->
             </select>
           </div>
           <button type="button" class="btn" id="btn-agregar-patrocinador">Agregar/Actualizar Patrocinador</button>
@@ -127,11 +126,11 @@
             <input type="date" id="fecha-medica" name="fecha-medica"/>
           </div>
           <div class="form-group">
-            <fieldset>
-              <legend>Tipo de corredor:</legend>
+            <label>Tipo de corredor:</label>
+            <div class="radio-row">
               <label><input type="radio" name="tipo-corredor" value="elite"/> Deportista de elite</label>
               <label><input type="radio" name="tipo-corredor" value="comun" checked/> Deportista común</label>
-            </fieldset>
+            </div>
           </div>
           <button type="button" class="btn" id="btn-agregar-corredor">Agregar Corredor</button>
         </form>
@@ -183,11 +182,11 @@
             </select>
           </div>
           <div class="form-group">
-            <fieldset>
-              <legend>Ordenar por:</legend>
+            <label>Ordenar por:</label>
+            <div class="radio-row">
               <label><input type="radio" name="ordenar" value="nombre" checked/> Nombre</label>
               <label><input type="radio" name="ordenar" value="numero"/> Número</label>
-            </fieldset>
+            </div>
           </div>
           <div class="table-container">
             <table>
@@ -213,10 +212,11 @@
       <div class="form-section">
         <h2>Visualizar Mapa</h2>
         <div class="form-group">
-          <fieldset>
+          <label>Visualizar:</label>
+          <div class="radio-row">
             <label><input type="radio" name="visualizar" value="carreras" checked/> Por Carreras</label>
             <label><input type="radio" name="visualizar" value="inscripciones"/> Por Inscripciones</label>
-          </fieldset>
+          </div>
         </div>
         <div id="mapa" class="map-container" style="width: 100%; height: 500px;">
           <!-- El mapa se cargará aquí -->
